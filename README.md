@@ -44,5 +44,23 @@
 			</ol>
 		</td>
 	</tr>
+	<tr>
+		<td>2017.12.5~00:48</td>
+		<td>
+			<ol>
+				<li>
+					<h2>将TP5框架引入项目中，入口文件与后台模板自动绑定</h2>
+				</li>
+				<li>TP5框架的下载，完成</li>
+				<li>【给后台创建单独的入口文件的做法】<br>
+					第一步：创建后台入口文件admin.php，文件内容与同样在public下的index.php文件内容一样。<br/>
+					第二步：修改配置项（application/config.php）：auto_bind_module为true
+
+
+				</li>
+				<li>卡在了设置后台入口文件那了，下次接着做。</li>
+			</ol>
+		</td>
+	</tr>
 </table>
 
