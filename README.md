@@ -1,5 +1,5 @@
 <ul>
-<h1 style="color:red;">文档编辑说明</h1>
+<h1 color:red;>文档编辑说明</h1>
 <li>红色字体为标志性事件</li>
 <li>此文档是对项目的记录文档</li>
 </ul>
