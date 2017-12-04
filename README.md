@@ -5,7 +5,7 @@
 </ul>
 <table>
 	<tr>
-		<td>时间</td>
+		<td width="40%">时间</td>
 		<td>内容</td>
 	</tr>
 	<tr>
