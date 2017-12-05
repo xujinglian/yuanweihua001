@@ -56,7 +56,7 @@
 					第一步：创建后台入口文件admin.php，文件内容与同样在public下的index.php文件内容一样。<br/>
 					第二步：修改配置项（application/config.php）：auto_bind_module为true
 				</li>
-				<li>卡在了设置后台入口文件那了，下次接着做。</li>
+				<li>《问题》设置后台admin.php入口文件的时候浏览器提示页面出错，但是自己的写法是按照视频里面的写法写的，所以这里存在一个问题。</li>
 			</ol>
 		</td>
 	</tr>
