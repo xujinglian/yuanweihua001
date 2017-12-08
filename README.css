@@ -1,0 +1,23 @@
+td{
+	border: 1px solid black;
+}
+table{
+	width: 80%;
+	float: left;
+	background-color: gray;
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	text-align: left;
+}
+ul{
+	width: 19%;
+	position: fixed;
+	right: 0px;
+	top:10px;
+	font-size: 25px;
+}
+.will{
+	color: blue;
+	font-size: 25px;
+}

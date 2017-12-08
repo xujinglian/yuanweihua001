@@ -1,0 +1,602 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>时光轴</title>  
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/main.js"></script>
+    <style>  
+        .container {  
+            width: 800px;  
+            margin-left: 150px;
+            margin-top: 140px;
+        }  
+  
+        .vertical-timeline {  
+            color: #FFF;  
+            font-family: "微软雅黑", "Microsoft YaHei";  
+            position: relative;  
+        }  
+  
+        .vertical-timeline-block {  
+            width: 100%;  
+            border-left: 2px solid #DDD;  
+            margin: 0 20px;  
+            position: relative;  
+            padding-bottom: 30px;  
+  
+            cursor: pointer;  
+        }  
+  
+        /* 时间轴的左侧图标 */  
+        .vertical-timeline-icon {  
+            width: 40px;  
+            height: 40px;  
+            border-radius: 20px;  
+            position: absolute;  
+            left: -22px;  
+            top: 10px;  
+  
+            text-align: center;  
+            line-height: 40px;  
+            cursor: pointer;  
+            transition: all 0.2s ease-in;  
+            -webkit-transition: all 0.2s ease-in;  
+            -moz-transition: all 0.2s ease-in;  
+            -o-transition: all 0.2s ease-in;  
+        }  
+  
+        .vertical-timeline-block:hover .vertical-timeline-icon {  
+            width: 50px;  
+            height: 50px;  
+            border-radius: 25px;  
+            line-height: 50px;  
+            left: -27px;  
+            box-shadow: 0 0 5px #CCC;  
+            font-size: 25px;  
+        }  
+  
+        /* 时间轴的左侧图标的各种样式 */  
+        .v-timeline-icon1 {  
+            background-color: #2aabd2;  
+        }  
+        .v-timeline-icon2 {  
+            background-color: #5cb85c;  
+        }  
+        .v-timeline-icon3 {  
+            background-color: #8c8c8c;  
+        }  
+        /* 时间轴的左侧图标上的序号*/  
+        .vertical-timeline-icon i {  
+            font-style: normal;  
+            color: #FFF;  
+        }  
+        /* 时间轴上的具体内容 */  
+        .vertical-timeline-content {  
+            background-color: #5bc0de;  
+            margin-left: 60px;  
+            padding: 20px 30px;  
+            border-radius: 5px;  
+            position: relative;  
+        }  
+        /* 时间轴上的具体内容左侧箭头 */  
+        .vertical-timeline-content:before {  
+            content: '';  
+            width: 0;  
+            height: 0;  
+  
+            border-top: 10px solid transparent;  
+            border-bottom: 10px solid transparent;  
+            border-right: 10px solid #5bc0de;  
+            border-left: 10px solid transparent;  
+  
+            position: absolute;  
+            right: 100%;  
+            top: 20px;  
+        }  
+        /* 时间轴的具体内容的格式 */  
+        .timeline-content {  
+            text-indent: 2em;  
+        }  
+        .time-more {  
+            overflow: hidden;  
+        }  
+        .time-more .time {  
+            float: left;  
+            line-height: 40px;  
+            display: inline-block;  
+        }  
+        .time-more .more {  
+            float: right;  
+        }  
+        .time-more .more a {  
+            display: inline-block;  
+            height: 20px;  
+            padding: 8px 15px;  
+            color: #FFF;  
+            text-decoration: none;  
+            font-size: 15px;  
+        }  
+        /* “更多信息”的风格 */  
+        .more-style1 {  
+            border-radius: 5px;  
+            background-color: #565656;  
+        }  
+        .more-style1:hover {  
+            background-color: #696969;  
+        }  
+        .more-style2 {  
+            border-radius: 5px;  
+            background-color: #1AB394;  
+        }  
+        .more-style2:hover {  
+            background-color: #18A689;  
+        }  
+  
+        .more-style3 {  
+            border-radius: 5px;  
+            background-color: #1C84C6;  
+        }  
+        .more-style3:hover {  
+            background-color: #1A7BB9;  
+        }  
+  
+        .vtb-tit {  
+            padding: 0 10px;  
+            height: 50px;  
+            line-height: 50px;  
+            text-align: center;  
+  
+            background-color: #1A7BB9;  
+            border-radius: 5px;  
+  
+            position: absolute;  
+            left: -120px;  
+            top: 10px;  
+        }  
+        #content{
+            float: right;
+            position: fixed;
+            right: 100px;
+            bottom: 20px;
+        }
+
+
+
+        canvas {
+            display:block;
+
+        }
+
+        /*页面顶部记录文档标志说明*/
+        #top_content{
+            width: 100%;
+            height: 121px;
+            border: 0px solid black;
+            background-color: #FFF;
+            float: left;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 100000;
+            margin: -10px;
+        }
+        #top_content i{
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            border-width: 1px;
+            border-radius: 10px;
+            margin-left: 50px;
+            margin-top: 0px;
+        }
+        #top_content p{
+            display: inline-block;
+            line-height: 30px;
+            height: 30px;
+        }
+        .will i{background-color: blue;}
+        .will p{color:blue;}
+        .importent{background-color: red;color: red;}
+    </style>  
+</head>  
+<body onload=initial();>  
+
+<div id="top_content">
+    <ul>
+        <li class="importent">
+            <i></i>
+            <p>重要的事情</p>
+        </li>
+        <li class="will">
+            <i></i>
+            <p>即将要做的事情</p>
+        </li>
+    </ul>
+</div>
+
+
+<div id="content">
+<!--顶层说明区域-->
+
+<!-- 显示日期详情 -->
+  <div id="detail">
+       <div id="date_content"></div>
+
+       <div id="animal_year"></div>
+        <!-- 显示时钟 -->
+        <p id="clock"></p>
+  </div>
+  <form name="calender_content" style="margin-top: -15px;">
+                  <table class="week">
+                    <tbody>
+                       <tr>
+                          <td class="ch">
+                                  <!-- 日历头部 -->
+                                 <table>
+                                     <tbody>
+                                           <tr class="day">
+                                                  <td>日</td>
+                                                  <td>一</td>
+                                                  <td>二</td>
+                                                  <td>三</td>
+                                                  <td>四</td>
+                                                  <td>五</td>
+                                                  <td>六</td>
+                                              </tr>
+                                         </tbody>
+                                  </table>
+                                  </tr>
+                                  </td>
+                                    <!-- 头部END -->
+                                 
+                 <!-- js动态的向表格写入日期 -->
+                            <script>
+                            var Num; //Num计算出日期位置
+                            for(i=0;i<6;i++) {
+
+                                    document.write('<table id="cal-content"><tr>');
+                                   
+                             for(j=0;j<7;j++) {
+                                Num = i*7+j;
+                                document.write('<td id="SD' + Num +'" onclick="addDay(' + Num +')" ');
+                        //周六 周日 假期样式设定
+                              if(j == 0|| j == 6)
+                              {
+                                    document.write(' class="aorange"');
+                               }else{
+                                    document.write(' class="one"');
+                              }
+                                    document.write('title=""> </td>')
+                             }
+
+                                document.write('</tr></table></td></tr><tr><td><table style="width:399;"><tr style="text-align:center"> ');
+                           //农历
+                           for(j=0;j<7;j++) {
+                              Num = i*7+j;
+                              document.write('<td id="LD' + Num +'" onclick="addDay(' + Num +')" class="bs" title=""> </td>')
+
+                           }
+                              document.write('</tr></table></td></tr>');
+                           
+                         }
+                         </script>  
+             <!-- 生成日期 END    -->
+                        </tr>
+                     </table>
+                   </td>
+                </tr>   
+              </tbody>
+            </table>
+             <table>
+               <tbody>
+                <tr>
+                  <td class="sm">
+                    <table class="table_head">
+                      <tbody>
+                      <tr>
+                        <td> 
+                        <!-- 选择年份菜单 -->
+                          <div class="year_select">
+                              <span onClick="BtN('year_d')"><img src="img/left.png"></span>
+                                <select onChange="chaCld()" name="SY">
+                                  <script>
+                                     for(i=1900;i<2050;i++) 
+                                    document.write('<option>'+i+"年")
+                                  </script>
+                                </select> 
+                              <span onClick="BtN('year_a')"><img src="img/right.png"></span> 
+                          </div>
+                          <!-- 回到当天菜单 -->
+                          <div  class="home_select">
+                               <span onClick="BtN('')"><img src="img/2.png" style="width:26px;height:26px"></span>
+                          </div>
+
+                          <!-- 选择月份菜单 -->
+                              <div style="display:inline-block;">
+                                  <span onClick="BtN('month_d')"><img src="img/left.png"></span>
+                                   <select onChange="chaCld()" name="SM">
+                                    <script>
+                                    for(i=1;i<13;i++) document.write('<option>'+i+"月")
+                                    </script>
+                                    </select> 
+                                  <span onClick="BtN('month_a')"><img src="img/right.png"></span>
+                              </div>
+                           </td>
+                       </tr>
+                     </tbody>
+                    </table>
+                  </td>
+                </tr> 
+             </tbody>
+           </table>
+      </form>
+   </div>
+<!--时光轴记录代码-->
+    <div class="container">  
+        <div class="vertical-timeline">  
+            <div class="vtb-tit">  
+                总时间点1  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon1">  
+                    <i class="icon">1</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1<a href="javascript:void(0)" class="del-timeline-block"></a></h2>  
+                    <p class="timeline-content">我去吃了个午饭</p>  
+                    <p class="time-more">  
+                        <span class="time">2016/4/30 13:48</span>  
+                        <span class="more more-style1"><a href="#">更多信息</a></span>  
+                    </p>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon2">  
+                    <i class="icon">2</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点2</h2>  
+                    <p class="timeline-content">我去吃了个午饭</p>  
+                    <p class="time-more">  
+                        <span class="time">2016/4/30 13:48</span>  
+                        <span class="more more-style2"><a href="#">更多信息</a></span>  
+                    </p>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon3">  
+                    <i class="icon">3</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点3</h2>  
+                    <p class="timeline-content">我去吃了个午饭</p>  
+                    <p class="time-more">  
+                        <span class="time">2016/4/30 13:48</span>  
+                        <span class="more more-style3"><a href="#">更多信息</a></span>  
+                    </p>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon1">  
+                    <i class="icon">4</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon2">  
+                    <i class="icon">5</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon3">  
+                    <i class="icon">6</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                </div>  
+            </div>  
+        </div>  
+  
+        <div class="vertical-timeline">  
+            <div class="vtb-tit">  
+                总时间点2  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon1">  
+                    <i class="icon">1</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <p class="timeline-content">我去吃了个午饭</p>  
+                    <p class="time-more">  
+                        <span class="time">2016/4/30 13:48</span>  
+                        <span class="more more-style1"><a href="#">更多信息</a></span>  
+                    </p>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon2">  
+                    <i class="icon">2</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点2</h2>  
+                    <p class="timeline-content">我去吃了个午饭</p>  
+                    <p class="time-more">  
+                        <span class="time">2016/4/30 13:48</span>  
+                        <span class="more more-style2"><a href="#">更多信息</a></span>  
+                    </p>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon3">  
+                    <i class="icon">3</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点3</h2>  
+                    <p class="timeline-content">我去吃了个午饭</p>  
+                    <p class="time-more">  
+                        <span class="time">2016/4/30 13:48</span>  
+                        <span class="more more-style3"><a href="#">更多信息</a></span>  
+                    </p>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon1">  
+                    <i class="icon">4</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon2">  
+                    <i class="icon">5</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon3">  
+                    <i class="icon">6</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                </div>  
+            </div>  
+        </div>  
+  
+        <div class="vertical-timeline">  
+            <div class="vtb-tit">  
+                总时间点2  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon1">  
+                    <i class="icon">1</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <p class="timeline-content">我去吃了个午饭</p>  
+                    <p class="time-more">  
+                        <span class="time">2016/4/30 13:48</span>  
+                        <span class="more more-style1"><a href="#">更多信息</a></span>  
+                    </p>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon2">  
+                    <i class="icon">2</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点2</h2>  
+                    <p class="timeline-content">我去吃了个午饭</p>  
+                    <p class="time-more">  
+                        <span class="time">2016/4/30 13:48</span>  
+                        <span class="more more-style2"><a href="#">更多信息</a></span>  
+                    </p>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon3">  
+                    <i class="icon">3</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点3</h2>  
+                    <p class="timeline-content">我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭我去吃了个午饭123</p>  
+                    <p class="time-more">  
+                        <span class="time">2016/4/30 13:48</span>  
+                        <span class="more more-style3"><a href="#">更多信息</a></span>  
+                    </p>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon1">  
+                    <i class="icon">4</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon2">  
+                    <i class="icon">5</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                </div>  
+            </div>  
+  
+            <div class="vertical-timeline-block">  
+                <div class="vertical-timeline-icon v-timeline-icon3">  
+                    <i class="icon">6</i>  
+                </div>  
+  
+                <div class="vertical-timeline-content">  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                    <h2>时间点1</h2>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+</body>  
+</html>  
